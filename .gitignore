@@ -2,3 +2,4 @@ venv/
 .idea/
 
 e-kart/settings.py
+e-kart/instance/

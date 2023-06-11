@@ -1,8 +1,12 @@
+from marshmallow_enum import EnumField
+
 from models import Ekart, CartItems, WishList, Sizes, Category
 from utilities.serializer import ma
 
 
 class EkartSerializer(ma.SQLAlchemyAutoSchema):
+    gender = EnumField(Ekart.Gender)
+
     class Meta:
         model = Ekart
         include_fk = True
