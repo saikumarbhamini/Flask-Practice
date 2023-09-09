@@ -11,7 +11,7 @@ def create_application():
     application = Flask(__name__)
     application.config.update(
         DEBUG=settings.DEBUG,
-        SERVER_NAME=f'{settings.HOST}:{settings.PORT}',
+        SERVER_NAME=f"{settings.HOST}:{settings.PORT}",
         SQLALCHEMY_DATABASE_URI=settings.SQLALCHEMY_DATABASE_URI,
         SQLALCHEMY_TRACK_MODIFICATIONS=settings.SQLALCHEMY_TRACK_MODIFICATIONS,
     )
@@ -32,5 +32,5 @@ def create_application():
 
 application = create_application()
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     application.run()

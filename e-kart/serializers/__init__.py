@@ -1,1 +1,7 @@
-from serializers.ekart import EkartSerializer, CartItemsSerializer, WishListSerializer, SizeSerializer, CategorySerializer
+from serializers.ekart import (
+    EkartSerializer,
+    CartItemsSerializer,
+    WishListSerializer,
+    SizeSerializer,
+    CategorySerializer,
+)

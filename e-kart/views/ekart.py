@@ -5,7 +5,13 @@ from marshmallow.exceptions import ValidationError
 from sqlalchemy.exc import IntegrityError
 
 from models import Ekart, CartItems, WishList, Sizes, Category
-from serializers import EkartSerializer, CartItemsSerializer, WishListSerializer, SizeSerializer, CategorySerializer
+from serializers import (
+    EkartSerializer,
+    CartItemsSerializer,
+    WishListSerializer,
+    SizeSerializer,
+    CategorySerializer,
+)
 from utilities.database import db
 
 
@@ -19,6 +25,7 @@ class EkartView(views.MethodView):
     """
     Ekart View
     """
+
     model = Ekart
     serializer_class = EkartSerializer
 
@@ -28,10 +35,12 @@ class EkartView(views.MethodView):
         result = serializer.dump(products)
 
         for product in result:
-            category = get_data_from(CategorySerializer, Category, product['category_id'])
-            size = get_data_from(SizeSerializer, Sizes, product['size_id'])
-            product["size"] = size['size']
-            product["category"] = category['category']
+            category = get_data_from(
+                CategorySerializer, Category, product["category_id"]
+            )
+            size = get_data_from(SizeSerializer, Sizes, product["size_id"])
+            product["size"] = size["size"]
+            product["category"] = category["category"]
 
         return jsonify(result), HTTPStatus.OK
 
@@ -42,7 +51,10 @@ class EkartView(views.MethodView):
             db.session.add(product)
             db.session.commit()
         except IntegrityError:
-            return jsonify({"message": "Product already exists!"}), HTTPStatus.BAD_REQUEST
+            return (
+                jsonify({"message": "Product already exists!"}),
+                HTTPStatus.BAD_REQUEST,
+            )
 
         return jsonify(serializer.dump(product)), HTTPStatus.OK
 
@@ -51,6 +63,7 @@ class EkartIDView(views.MethodView):
     """
     EkartIDView
     """
+
     model = Ekart
     serializer_class = EkartSerializer
 
@@ -61,10 +74,10 @@ class EkartIDView(views.MethodView):
         serializer = self.serializer_class()
 
         result = serializer.dump(product)
-        category = get_data_from(CategorySerializer, Category, result['category_id'])
-        size = get_data_from(SizeSerializer, Sizes, result['size_id'])
-        result["size"] = size['size']
-        result["category"] = category['category']
+        category = get_data_from(CategorySerializer, Category, result["category_id"])
+        size = get_data_from(SizeSerializer, Sizes, result["size_id"])
+        result["size"] = size["size"]
+        result["category"] = category["category"]
 
         return jsonify(result), HTTPStatus.OK
 
@@ -109,6 +122,7 @@ class CartItemsView(views.MethodView):
     """
     CartItems view
     """
+
     model = CartItems
     serializer_class = CartItemsSerializer
 
@@ -118,9 +132,9 @@ class CartItemsView(views.MethodView):
         result = serializer.dump(products)
 
         for product in result:
-            item = get_data_from(EkartSerializer, Ekart, product['cart_item'])
-            category = get_data_from(CategorySerializer, Category, item['category_id'])
-            size = get_data_from(SizeSerializer, Sizes, item['size_id'])
+            item = get_data_from(EkartSerializer, Ekart, product["cart_item"])
+            category = get_data_from(CategorySerializer, Category, item["category_id"])
+            size = get_data_from(SizeSerializer, Sizes, item["size_id"])
             item["size"] = size["size"]
             item["category"] = category["category"]
             product["product"] = item
@@ -141,8 +155,9 @@ class CartItemsView(views.MethodView):
 
 class CartItemsIDView(views.MethodView):
     """
-        CartItemsID view
+    CartItemsID view
     """
+
     model = CartItems
     serializer_class = CartItemsSerializer
 
@@ -153,10 +168,10 @@ class CartItemsIDView(views.MethodView):
         serializer = self.serializer_class()
         result = serializer.dump(product)
 
-        item = EkartSerializer().dump(Ekart.query.get(result['cart_item']))
+        item = EkartSerializer().dump(Ekart.query.get(result["cart_item"]))
 
-        category = get_data_from(CategorySerializer, Category, result['category_id'])
-        size = get_data_from(SizeSerializer, Sizes, item['size_id'])
+        category = get_data_from(CategorySerializer, Category, result["category_id"])
+        size = get_data_from(SizeSerializer, Sizes, item["size_id"])
         item["size"] = size["size"]
         item["category"] = category["category"]
         result["product"] = item
@@ -209,7 +224,7 @@ class WishListView(views.MethodView):
         result = serializer.dump(products)
 
         for product in result:
-            item = EkartSerializer().dump(Ekart.query.get(product['cart_item']))
+            item = EkartSerializer().dump(Ekart.query.get(product["cart_item"]))
             product["product"] = item
 
         return jsonify(result), HTTPStatus.OK
@@ -221,7 +236,10 @@ class WishListView(views.MethodView):
             db.session.add(product)
             db.session.commit()
         except IntegrityError:
-            return jsonify({"message": "Item is already in the wishlist."}), HTTPStatus.BAD_REQUEST
+            return (
+                jsonify({"message": "Item is already in the wishlist."}),
+                HTTPStatus.BAD_REQUEST,
+            )
 
         return jsonify(serializer.dump(product)), HTTPStatus.OK
 
@@ -237,7 +255,7 @@ class WishListIDView(views.MethodView):
         serializer = self.serializer_class()
         result = serializer.dump(product)
 
-        item = EkartSerializer().dump(Ekart.query.get(result['cart_item']))
+        item = EkartSerializer().dump(Ekart.query.get(result["cart_item"]))
         result["product"] = item
 
         return jsonify(serializer.dump(product)), HTTPStatus.OK
@@ -292,6 +310,9 @@ class CategoryView(views.MethodView):
             db.session.add(sizes)
             db.session.commit()
         except IntegrityError:
-            return jsonify({"message": "Data duplication not allowed."}), HTTPStatus.BAD_REQUEST
+            return (
+                jsonify({"message": "Data duplication not allowed."}),
+                HTTPStatus.BAD_REQUEST,
+            )
 
         return jsonify(serializer.dump(sizes)), HTTPStatus.OK
