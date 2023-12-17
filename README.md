@@ -9,3 +9,5 @@ PORT = <PORT>
 SQLALCHEMY_DATABASE_URI = <DATABASE_URI>,
 SQLALCHEMY_TRACK_MODIFICATIONS = <Bool>
 ```
+You have to run ```flask db migrate```  in termilal or command prompt to apply
+migrations to database.
